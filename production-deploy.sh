@@ -228,11 +228,28 @@ sudo nginx -t
 
 # Step 12: Setup UFW Firewall
 print_step "14. Configuring firewall..."
+sudo ufw --force reset
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Allow SSH with rate limiting
+sudo ufw limit ssh comment 'SSH with rate limiting'
+
+# Allow HTTP/HTTPS with rate limiting
+sudo ufw limit 80/tcp comment 'HTTP with rate limiting'
+sudo ufw limit 443/tcp comment 'HTTPS with rate limiting'
+
+# Allow application port only from localhost
+sudo ufw allow from 127.0.0.1 to any port 3000 comment 'App internal'
+
+# Allow PostgreSQL only from localhost
+sudo ufw allow from 127.0.0.1 to any port 5432 comment 'PostgreSQL'
+
+# Enable logging
+sudo ufw logging on
+
 sudo ufw --force enable
-sudo ufw allow ssh
-sudo ufw allow 'Nginx Full'
-sudo ufw allow 3000  # Application port
-sudo ufw status
+sudo ufw status verbose
 
 # Step 13: Setup fail2ban for security
 print_step "15. Configuring fail2ban..."
@@ -244,18 +261,38 @@ sudo tee /etc/fail2ban/jail.d/nginx.conf << EOF
 enabled = true
 port = http,https
 logpath = /var/log/nginx/error.log
+maxretry = 3
+bantime = 3600
 
 [nginx-limit-req]
 enabled = true
 port = http,https
 logpath = /var/log/nginx/error.log
 maxretry = 10
+bantime = 1800
 
 [nginx-botsearch]
 enabled = true
 port = http,https
 logpath = /var/log/nginx/error.log
 maxretry = 2
+bantime = 86400
+
+[nginx-dos]
+enabled = true
+port = http,https
+filter = nginx-dos
+logpath = /var/log/nginx/platinumscout-access.log
+maxretry = 300
+findtime = 600
+bantime = 1800
+EOF
+
+# Create DOS filter
+sudo tee /etc/fail2ban/filter.d/nginx-dos.conf << EOF
+[Definition]
+failregex = ^<HOST> -.*"(GET|POST).*HTTP.*" 200
+ignoreregex =
 EOF
 
 # Start fail2ban
@@ -295,8 +332,64 @@ if [ -f "package.json" ] && grep -q "db:push" package.json; then
     print_status "Database schema pushed"
 fi
 
+# Step 19: Apply enhanced security hardening
+print_step "21. Applying enterprise security hardening..."
+if [ -f "security-hardening-enhanced.sh" ]; then
+    chmod +x security-hardening-enhanced.sh
+    print_warning "Enhanced security hardening available. Run ./security-hardening-enhanced.sh after deployment for enterprise-grade security."
+else
+    print_warning "Enhanced security script not found. Consider running additional security hardening."
+fi
+
+# Setup basic security monitoring
+print_step "22. Setting up security monitoring..."
+sudo mkdir -p /var/log/platinumscout
+sudo chown platinumscout:platinumscout /var/log/platinumscout
+
+# Create security check script
+sudo tee /usr/local/bin/platinumscout-security-check << 'EOF'
+#!/bin/bash
+# Basic security monitoring for Platinum Scout
+
+LOG_FILE="/var/log/platinumscout/security-$(date +%Y%m%d).log"
+
+echo "$(date): Security check started" >> $LOG_FILE
+
+# Check for suspicious processes
+ps aux | grep -E "(bitcoin|crypto|mining)" >> $LOG_FILE 2>/dev/null
+
+# Check network connections
+netstat -tulpn | grep -E ":(22|80|443|3000|5432)" >> $LOG_FILE
+
+# Check fail2ban status
+fail2ban-client status >> $LOG_FILE 2>/dev/null
+
+# Check firewall status
+ufw status >> $LOG_FILE 2>/dev/null
+
+echo "$(date): Security check completed" >> $LOG_FILE
+EOF
+
+sudo chmod +x /usr/local/bin/platinumscout-security-check
+
+# Schedule security checks
+echo "*/30 * * * * root /usr/local/bin/platinumscout-security-check" | sudo tee -a /etc/crontab
+
+# Setup log rotation for security logs
+sudo tee /etc/logrotate.d/platinumscout << 'EOF'
+/var/log/platinumscout/*.log {
+    daily
+    missingok
+    rotate 30
+    compress
+    delaycompress
+    notifempty
+    create 0644 platinumscout platinumscout
+}
+EOF
+
 # Final status check
-print_step "21. Final status check..."
+print_step "23. Final status check..."
 echo ""
 print_status "🎉 Deployment completed successfully!"
 print_status "Domain: https://platinumscout.ai/"
@@ -312,6 +405,8 @@ echo "2. Configure DNS A record: platinumscout.ai → $(curl -s ifconfig.me)"
 echo "3. Test the application: https://platinumscout.ai/"
 echo "4. Monitor logs: pm2 logs platinumscout-api"
 echo "5. Check PM2 status: pm2 status"
+echo "6. Run enhanced security: ./security-hardening-enhanced.sh"
+echo "7. Review security logs: tail -f /var/log/platinumscout/security-*.log"
 
 # Display useful commands
 echo ""
@@ -321,7 +416,11 @@ echo "• View logs: pm2 logs platinumscout-api"
 echo "• Restart application: pm2 restart platinumscout-api"
 echo "• Check Nginx status: sudo systemctl status nginx"
 echo "• View Nginx error logs: sudo tail -f /var/log/nginx/error.log"
-echo "• Check firewall status: sudo ufw status"
+echo "• Check firewall status: sudo ufw status verbose"
+echo "• Check fail2ban status: sudo fail2ban-client status"
+echo "• View blocked IPs: sudo fail2ban-client status nginx-limit-req"
+echo "• Security monitoring: tail -f /var/log/platinumscout/security-*.log"
 echo "• Renew SSL manually: sudo certbot renew"
+echo "• Run security check: sudo /usr/local/bin/platinumscout-security-check"
 
 print_status "🚀 Platinum Scout is now deployed to production!"
