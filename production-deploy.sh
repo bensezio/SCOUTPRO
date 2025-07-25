@@ -10,7 +10,7 @@ set -e
 echo "🚀 Starting Platinum Scout Production Deployment to https://platinumscout.ai/"
 echo "📍 Location: London Datacenter (4 Cores, 16GB RAM, 200GB SSD)"
 
-# Color codes for output
+# Colour codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
