@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(210, 40%, 2%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 16%, 47%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(210, 40%, 2%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(210, 40%, 2%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(193, 54%, 54%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 84%, 5%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222, 84%, 5%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(193, 54%, 54%);
+  --radius: 0.5rem;
+  
+  /* Custom colors for hand-drawn theme */
+  --coral: hsl(0, 79%, 70%);
+  --mint: hsl(177, 52%, 58%);
+  --sky: hsl(199, 65%, 55%);
+  --sage: hsl(142, 36%, 69%);
+  --warm-yellow: hsl(37, 93%, 68%);
+  --lavender: hsl(303, 100%, 83%);
+  --slate: hsl(210, 22%, 22%);
+  --paper: hsl(210, 17%, 98%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 5%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 5%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --primary: hsl(193, 54%, 54%);
+  --primary-foreground: hsl(222, 84%, 5%);
+  --secondary: hsl(217, 32%, 17%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217, 32%, 17%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 30%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(193, 54%, 54%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .font-kalam {
+    font-family: 'Kalam', cursive;
+  }
+
+  .hand-drawn {
+    border-radius: 15px 20px 18px 22px;
+    position: relative;
+  }
+  
+  .hand-drawn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid currentColor;
+    border-radius: 18px 22px 16px 25px;
+    opacity: 0.3;
+    z-index: -1;
+  }
+  
+  .paper-texture {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255,255,255,0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(255,255,255,0.3) 0%, transparent 50%);
+    background-size: 200px 200px, 150px 150px, 180px 180px;
+    background-position: 0 0, 40px 40px, 80px 80px;
+  }
+  
+  .challenge-card {
+    background: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(210, 17%, 98%) 100%);
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.1), 6px 6px 0px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+  
+  .challenge-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.15), 10px 10px 0px rgba(0,0,0,0.08);
+  }
+  
+  .btn-hand-drawn {
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+    border: 2px solid rgba(0,0,0,0.1);
+  }
+  
+  .btn-hand-drawn:hover {
+    transform: translateY(-1px);
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.25);
+  }
+  
+  .btn-hand-drawn:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+  }
+  
+  .friend-avatar {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--lavender) 100%);
+    border: 3px solid white;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+  }
+  
+  .notification-badge {
+    animation: pulse-notification 1.5s ease-in-out infinite;
+  }
+  
+  .bg-coral {
+    background-color: var(--coral);
+  }
+  
+  .bg-mint {
+    background-color: var(--mint);
+  }
+  
+  .bg-sky {
+    background-color: var(--sky);
+  }
+  
+  .bg-sage {
+    background-color: var(--sage);
+  }
+  
+  .bg-warm-yellow {
+    background-color: var(--warm-yellow);
+  }
+  
+  .bg-paper {
+    background-color: var(--paper);
+  }
+  
+  .text-coral {
+    color: var(--coral);
+  }
+  
+  .text-mint {
+    color: var(--mint);
+  }
+  
+  .text-sky {
+    color: var(--sky);
+  }
+  
+  .text-sage {
+    color: var(--sage);
+  }
+  
+  .text-warm-yellow {
+    color: var(--warm-yellow);
+  }
+  
+  .text-slate {
+    color: var(--slate);
+  }
+}
+
+@layer utilities {
+  @keyframes wiggle {
+    0%, 7% { transform: rotateZ(0deg); }
+    15% { transform: rotateZ(-15deg); }
+    20% { transform: rotateZ(10deg); }
+    25% { transform: rotateZ(-10deg); }
+    30% { transform: rotateZ(6deg); }
+    35% { transform: rotateZ(-4deg); }
+    40%, 100% { transform: rotateZ(0deg); }
+  }
+  
+  @keyframes pulse-notification {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  .animate-wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+  }
+
+  /* Mobile-first responsive design utilities */
+  @media (max-width: 768px) {
+    .mobile-stack {
+      flex-direction: column !important;
+      gap: 0.75rem !important;
+    }
+    
+    .mobile-full-width {
+      width: 100% !important;
+    }
+    
+    .mobile-text-center {
+      text-align: center !important;
+    }
+    
+    .mobile-hidden {
+      display: none !important;
+    }
+    
+    .mobile-padding {
+      padding: 1rem !important;
+    }
+    
+    .mobile-margin {
+      margin: 0.5rem !important;
+    }
+    
+    /* Touch-friendly buttons */
+    .touch-target {
+      min-height: 44px !important;
+      min-width: 44px !important;
+    }
+    
+    /* Optimized spacing for mobile */
+    .mobile-spacing > * + * {
+      margin-top: 1rem !important;
+    }
+    
+    /* Card adjustments for mobile */
+    .mobile-card {
+      margin: 0.5rem !important;
+      border-radius: 0.75rem !important;
+    }
+    
+    /* Text size adjustments */
+    .mobile-h1 {
+      font-size: 1.875rem !important;
+      line-height: 2.25rem !important;
+    }
+    
+    .mobile-h2 {
+      font-size: 1.5rem !important;
+      line-height: 2rem !important;
+    }
+    
+    /* Grid adjustments */
+    .mobile-grid-1 {
+      grid-template-columns: 1fr !important;
+    }
+    
+    /* Dashboard header mobile optimization */
+    .dashboard-header-mobile {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 1rem !important;
+    }
+    
+    /* Quick actions mobile grid */
+    .quick-actions-mobile {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+  }
+
+  /* Touch interaction improvements */
+  @media (hover: none) and (pointer: coarse) {
+    .hover\:scale-105:hover {
+      transform: scale(1.02) !important;
+    }
+    
+    .hover\:shadow-lg:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Enhanced touch targets for mobile */
+    .touch-enhanced {
+      padding: 0.75rem !important;
+    }
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in,
+    .animate-slide-in-left,
+    .animate-slide-in-right,
+    .animate-fade-in-up,
+    .animate-scale-in,
+    .animate-bounce-subtle,
+    .animate-pulse-soft,
+    .animate-shimmer {
+      animation: none !important;
+    }
+    
+    .transition-all,
+    .transition-colors,
+    .transition-transform {
+      transition: none !important;
+    }
+  }
+}
