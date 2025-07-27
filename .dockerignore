@@ -1,0 +1,59 @@
+# DEPLOYMENT FIX: Prevent large directories from being included in Docker image
+
+# Development and documentation files
+node_modules/
+.git/
+.vscode/
+.idea/
+*.log
+*.pid
+*.seed
+*.pid.lock
+.DS_Store
+Thumbs.db
+
+# Large directories causing size issues
+attached_assets/
+ai-services/
+python_ml_logs/
+*.tar.gz
+*.zip
+
+# Test and documentation files
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+__tests__/
+coverage/
+docs/
+examples/
+*.md
+README*
+CHANGELOG*
+LICENSE*
+
+# Development configuration
+.env.local
+.env.development
+.env.test
+.eslintrc*
+.prettierrc*
+tsconfig.json
+jest.config.*
+cypress/
+playwright/
+
+# Build artifacts (will be built inside container)
+dist/
+build/
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+
+# Source maps and type definitions
+*.map
+*.d.ts

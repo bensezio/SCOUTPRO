@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Main PlatinumEdge Application
+  platinumedge-app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:password@postgres:5432/platinumedge_dev}
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./uploads:/app/uploads
+    networks:
+      - platinumedge-network
+
+  # Note: AI services moved to separate deployment for cost optimization
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=platinumedge_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - platinumedge-network
+
+  # Note: Redis and Nginx removed for simplified static deployment
+
+volumes:
+  postgres_data:
+
+networks:
+  platinumedge-network:
+    driver: bridge

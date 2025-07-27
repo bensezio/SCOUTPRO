@@ -1,0 +1,15 @@
+# Static deployment configuration for Replit
+# Optimized to avoid Cloud Run 8GiB limits entirely
+
+[deployment]
+type = "static"
+build = ["bash", "build-static-optimized.sh"]
+publishDir = "dist/public"
+run = ["node", "dist/index.js"]
+
+[env]
+NODE_ENV = "production"
+PORT = "5000"
+
+[build]
+ignoreDev = true
