@@ -17,7 +17,7 @@ module.exports = {
       API_URL: process.env.API_URL,
       ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
       JWT_SECRET: process.env.JWT_SECRET,
-      STRIPE_API_KEY: process.env.STRIPE_API_KEY,
+      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
       SENDGRID_API_KEY: process.env.SENDGRID_API_KEY
     },
