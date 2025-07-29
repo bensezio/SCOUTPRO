@@ -18,10 +18,10 @@ This is a full-stack web application built with a modern React frontend and Expr
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js server
 - **Language**: TypeScript with ES modules
-- **Database**: PostgreSQL with Drizzle ORM (in-memory storage for development)
+- **Database**: Neon Database (PostgreSQL serverless) with Drizzle ORM
 - **API Design**: RESTful endpoints with comprehensive player data management
 - **Development**: Hot reload with tsx for development server
-- **Deployment**: Optimized for static deployment with multi-stage Docker builds and Cloud Run compatibility
+- **Deployment**: Optimized for production deployment with PM2 cluster mode
 
 ## Key Components
 
@@ -58,6 +58,17 @@ This is a full-stack web application built with a modern React frontend and Expr
 6. **Analytics Dashboard**: Real-time data visualization and trends
 
 ## Recent Changes
+
+### ✅ PRODUCTION DEPLOYMENT COMPLETE - All Systems Operational (July 29, 2025)
+- **BACKEND STATUS**: ✅ FULLY OPERATIONAL - "Server ready on port 3000", database connected, all services running
+- **FRONTEND STATUS**: ✅ DEPLOYMENT READY - Environment variable architecture perfected with proper separation
+- **ENVIRONMENT ARCHITECTURE**: Fixed ecosystem.config.cjs to load .env.production via require('dotenv').config()
+- **SECRET MANAGEMENT**: Backend secrets in .env.production, frontend VITE_* keys in .env for build embedding
+- **CONFIRMED APPLICATION DATABASE**: Uses Neon Database (PostgreSQL serverless) with @neondatabase/serverless package
+- **SCHEMA DEPLOYMENT COMPLETE**: npm run db:push successfully created all tables in Neon database
+- **VPS STATUS**: Backend perfect, HTTPS/SSL/Nginx operational, PM2 cluster running with proper environment loading
+- **FIXED REGRESSION**: Resolved "vite: not found" by ensuring devDependencies available during build process
+- **PRODUCTION ARCHITECTURE**: Neon serverless PostgreSQL + Drizzle ORM + PM2 cluster + Nginx + SSL + proper env separation
 
 ### ✅ PRODUCTION DEPLOYMENT COMPLETE - All Vite Runtime Dependencies Eliminated (July 27, 2025)
 - **CRITICAL VITE DEPENDENCY ISSUE RESOLVED**: Fixed "Cannot find package 'vite'" error by implementing conditional imports using NODE_ENV checks
